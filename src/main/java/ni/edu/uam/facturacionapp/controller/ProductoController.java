@@ -10,6 +10,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import ni.edu.uam.facturacionapp.dao.ProductoDAO;
 import ni.edu.uam.facturacionapp.model.Categoria;
 import ni.edu.uam.facturacionapp.model.Producto;
 
@@ -52,6 +53,10 @@ public class ProductoController {
         colPrecio.setCellValueFactory(new PropertyValueFactory<>("precioVenta"));
         colExistencia.setCellValueFactory(new PropertyValueFactory<>("existencia"));
         colActivo.setCellValueFactory(new PropertyValueFactory<>("activo"));
+
+        ProductoDAO dao = new ProductoDAO();
+        productos.addAll(dao.listar());
+        tblProductos.setItems(productos);
     }
 
     @FXML
