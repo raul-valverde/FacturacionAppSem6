@@ -2,7 +2,7 @@ package ni.edu.uam.facturacionapp.dao;
 
 import ni.edu.uam.facturacionapp.model.Categoria;
 import ni.edu.uam.facturacionapp.model.Producto;
-import ni.edu.uam.facturacionapp.util.DatabaseConnection;
+import ni.edu.uam.facturacionapp.connection.DatabaseConnection;
 
 import java.sql.*;
 import java.util.ArrayList;
