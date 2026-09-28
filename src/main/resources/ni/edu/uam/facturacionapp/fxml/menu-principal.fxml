@@ -9,7 +9,7 @@
       <VBox prefHeight="43.0" prefWidth="600.0" BorderPane.alignment="CENTER">
          <children>
             <MenuBar>
-              <menus>//Menu de los productos
+              <menus>
                 <Menu fx:id="mnuProductos" mnemonicParsing="false" onAction="#abrirProductos" text="Productos">
 
                 </Menu>
