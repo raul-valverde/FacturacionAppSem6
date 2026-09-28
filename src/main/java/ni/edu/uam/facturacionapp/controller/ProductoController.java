@@ -87,13 +87,33 @@ public class ProductoController {
                         "Precio mayor que cero y existencia no negativa.");
                 return;
             }
-            productos.add(new Producto(null, txtCodigo.getText().trim(),
-                    txtNombre.getText().trim(), cmbCategoria.getValue(), precio,
-                    existencia, rutaImagen, chkActivo.isSelected()));
+
+            Producto nuevoProducto = new Producto(
+                    null,
+                    txtCodigo.getText().trim(),
+                    txtNombre.getText().trim(),
+                    cmbCategoria.getValue(),
+                    precio,
+                    existencia,
+                    rutaImagen,
+                    chkActivo.isSelected()
+            );
+
+            // AQUÍ SE GUARDA EN LA BASE DE DATOS:
+            ProductoDAO dao = new ProductoDAO();
+            dao.guardar(nuevoProducto);
+
+            // Agrega a la lista visual de la pantalla
+            productos.add(nuevoProducto);
+
             mensaje(Alert.AlertType.INFORMATION, "Producto agregado correctamente.");
             limpiar();
+
         } catch (NumberFormatException e) {
             mensaje(Alert.AlertType.ERROR, "Precio o existencia no válidos.");
+        } catch (Exception e) {
+            e.printStackTrace();
+            mensaje(Alert.AlertType.ERROR, "Error: " + e.getMessage());
         }
     }
 
