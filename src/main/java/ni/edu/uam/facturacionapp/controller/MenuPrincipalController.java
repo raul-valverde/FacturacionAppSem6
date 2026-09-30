@@ -19,6 +19,17 @@ public class MenuPrincipalController {
             new Alert(Alert.AlertType.ERROR, "Detalle del error: " + e.getMessage()).showAndWait();
         }
     }
+    @FXML
+    private void abrirCategorias() {
+        try {
+            SceneManager.abrirVentana(
+                    "/ni/edu/uam/facturacionapp/fxml/categoria-view.fxml",
+                    "Gestión de Categorías");
+        } catch (Exception e) {
+            e.printStackTrace();
+            new Alert(Alert.AlertType.ERROR, "Error al abrir la ventana: " + e.getMessage()).showAndWait();
+        }
+    }
 
     @FXML
     private void salir() {
@@ -27,4 +38,5 @@ public class MenuPrincipalController {
         if (a.showAndWait().orElse(ButtonType.CANCEL) == ButtonType.OK)
             Platform.exit();
     }
+
 }
