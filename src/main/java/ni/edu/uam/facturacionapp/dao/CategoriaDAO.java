@@ -21,7 +21,7 @@ public class CategoriaDAO {
                 lista.add(new Categoria(
                         rs.getInt("id"),
                         rs.getString("nombre"),
-                        rs.getBoolean("activo")
+                        rs.getBoolean("activa")
                 ));
             }
         } catch (SQLException e) {
@@ -31,7 +31,7 @@ public class CategoriaDAO {
     }
 
     public boolean guardar(Categoria c) {
-        String sql = "INSERT INTO categoria (nombre, activa) VALUES (?, ?)";
+        String sql = "INSERT INTO categoria (nombre, activa) VALUES (?, ?);";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
@@ -46,7 +46,7 @@ public class CategoriaDAO {
     }
 
     public boolean actualizar(Categoria c) {
-        String sql = "UPDATE categoria SET nombre = ?, activo = ? WHERE id = ?";
+        String sql = "UPDATE categoria SET nombre = ?, activa = ? WHERE id = ?";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
