@@ -18,7 +18,7 @@
     </padding>
 
     <children>
-        <!-- SECCIÓN IZQUIERDA: Formulario dentro de una Tarjeta (Card) -->
+        <!-- SECCIÓN IZQUIERDA: Formulario -->
         <VBox prefWidth="320.0" spacing="12.0" styleClass="card-panel">
             <padding>
                 <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
@@ -26,7 +26,6 @@
             <children>
                 <Label styleClass="section-title" text="Gestión de Producto" />
 
-                <!-- Campos del Formulario -->
                 <VBox spacing="3.0">
                     <children>
                         <Label text="Código:" />
@@ -68,33 +67,49 @@
                         <ImageView fx:id="imgProducto" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true" />
                         <Button fx:id="btnImagen" mnemonicParsing="false" onAction="#seleccionarImagen" styleClass="btn-secondary" text="Buscar Imagen" />
                     </children>
-                    <VBox.margin>
-                        <Insets top="5.0" />
-                    </VBox.margin>
                 </VBox>
 
                 <CheckBox fx:id="chkActivo" mnemonicParsing="false" text="Estado Activo" />
 
-                <!-- Botones de Acción -->
-                <HBox alignment="CENTER_RIGHT" spacing="10.0">
+                <!-- Botones CRUD -->
+                <VBox spacing="8.0">
                     <children>
-                        <Button fx:id="btnCerrar" mnemonicParsing="false" onAction="#cerrar" styleClass="btn-secondary" text="Cerrar" />
-                        <Button fx:id="btnGuardar" mnemonicParsing="false" onAction="#guardar" styleClass="btn-primary" text="Guardar" />
+                        <HBox alignment="CENTER" spacing="8.0">
+                            <children>
+                                <Button fx:id="btnGuardar" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#guardar" styleClass="btn-primary" text="Guardar" HBox.hgrow="ALWAYS" />
+                                <Button fx:id="btnActualizar" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#actualizar" styleClass="btn-secondary" text="Actualizar" HBox.hgrow="ALWAYS" />
+                            </children>
+                        </HBox>
+                        <HBox alignment="CENTER" spacing="8.0">
+                            <children>
+                                <Button fx:id="btnEliminar" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#eliminar" styleClass="btn-secondary" text="Eliminar" HBox.hgrow="ALWAYS" />
+                                <Button fx:id="btnLimpiar" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#limpiar" styleClass="btn-secondary" text="Limpiar" HBox.hgrow="ALWAYS" />
+                            </children>
+                        </HBox>
                     </children>
                     <VBox.margin>
-                        <Insets top="10.0" />
+                        <Insets top="5.0" />
                     </VBox.margin>
-                </HBox>
+                </VBox>
             </children>
         </VBox>
 
-        <!-- SECCIÓN DERECHA: Tabla con espacio expandido -->
+        <!-- SECCIÓN DERECHA: Tabla, Búsqueda y Filtros -->
         <VBox spacing="10.0" styleClass="card-panel" HBox.hgrow="ALWAYS">
             <padding>
                 <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
             </padding>
             <children>
                 <Label styleClass="section-title" text="Catálogo de Productos" />
+
+                <!-- BARRA DE BÚSQUEDA Y FILTROS -->
+                <HBox spacing="10.0" alignment="CENTER_LEFT">
+                    <children>
+                        <TextField fx:id="txtBuscar" promptText="Buscar por código, nombre o cat..." HBox.hgrow="ALWAYS" />
+                        <ComboBox fx:id="cmbFiltroEstado" prefWidth="130.0" promptText="Estado" />
+                        <ComboBox fx:id="cmbFiltroCategoria" prefWidth="150.0" promptText="Categoría" />
+                    </children>
+                </HBox>
 
                 <TableView fx:id="tblProductos" VBox.vgrow="ALWAYS">
                     <columns>

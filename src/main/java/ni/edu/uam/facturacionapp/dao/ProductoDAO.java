@@ -1,8 +1,8 @@
 package ni.edu.uam.facturacionapp.dao;
 
+import ni.edu.uam.facturacionapp.connection.DatabaseConnection;
 import ni.edu.uam.facturacionapp.model.Categoria;
 import ni.edu.uam.facturacionapp.model.Producto;
-import ni.edu.uam.facturacionapp.connection.DatabaseConnection;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -10,7 +10,6 @@ import java.util.List;
 
 public class ProductoDAO {
 
-    // Guardar usando PreparedStatement
     public boolean guardar(Producto producto) {
         String sql = """
             INSERT INTO producto (
@@ -31,12 +30,55 @@ public class ProductoDAO {
 
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
+            System.err.println("Error al guardar producto: " + e.getMessage());
             e.printStackTrace();
             return false;
         }
     }
 
-    // Listar productos para el TableView
+    public boolean actualizar(Producto producto) {
+        String sql = """
+            UPDATE producto SET 
+                codigo = ?, nombre = ?, categoria_id = ?, precio_venta = ?, 
+                existencia = ?, ruta_imagen = ?, activo = ?
+            WHERE id = ?
+            """;
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, producto.getCodigo());
+            ps.setString(2, producto.getNombre());
+            ps.setInt(3, producto.getCategoria().getId());
+            ps.setBigDecimal(4, producto.getPrecioVenta());
+            ps.setInt(5, producto.getExistencia());
+            ps.setString(6, producto.getRutaImagen());
+            ps.setBoolean(7, producto.isActivo());
+            ps.setInt(8, producto.getId());
+
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.err.println("Error al actualizar producto: " + e.getMessage());
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean eliminar(int id) {
+        String sql = "DELETE FROM producto WHERE id = ?";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, id);
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.err.println("Error al eliminar producto: " + e.getMessage());
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     public List<Producto> listar() {
         List<Producto> lista = new ArrayList<>();
         String sql = """
@@ -70,6 +112,7 @@ public class ProductoDAO {
                 lista.add(prod);
             }
         } catch (SQLException e) {
+            System.err.println("Error al listar productos: " + e.getMessage());
             e.printStackTrace();
         }
         return lista;
