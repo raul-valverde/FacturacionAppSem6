@@ -8,6 +8,8 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import ni.edu.uam.facturacionapp.dao.CategoriaDAO;
 import ni.edu.uam.facturacionapp.model.Categoria;
 
+import java.util.Optional;
+
 public class CategoriaController {
 
     @FXML private TextField txtNombre;
@@ -25,7 +27,7 @@ public class CategoriaController {
     private void initialize() {
         colId.setCellValueFactory(new PropertyValueFactory<>("id"));
         colNombre.setCellValueFactory(new PropertyValueFactory<>("nombre"));
-        colActivo.setCellValueFactory(new PropertyValueFactory<>("activo"));
+        colActivo.setCellValueFactory(new PropertyValueFactory<>("activa"));
 
         tblCategorias.setItems(listaCategorias);
         cargarCategorias();
@@ -51,13 +53,18 @@ public class CategoriaController {
             return;
         }
 
-        Categoria nueva = new Categoria(0, txtNombre.getText().trim(), chkActivo.isSelected());
-        if (categoriaDAO.guardar(nueva)) {
-            mensaje(Alert.AlertType.INFORMATION, "Categoría guardada con éxito.");
-            cargarCategorias();
-            limpiar();
-        } else {
-            mensaje(Alert.AlertType.ERROR, "Error al guardar la categoría.");
+        Categoria nueva = new Categoria(null, txtNombre.getText().trim(), chkActivo.isSelected());
+        try {
+            if (categoriaDAO.guardar(nueva)) {
+                mensaje(Alert.AlertType.INFORMATION, "Categoría guardada con éxito.");
+                cargarCategorias();
+                limpiar();
+            } else {
+                mensaje(Alert.AlertType.ERROR, "No se insertó ninguna fila en la base de datos.");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            mensaje(Alert.AlertType.ERROR, "Detalle del error: " + e.getMessage());
         }
     }
 
@@ -68,15 +75,25 @@ public class CategoriaController {
             return;
         }
 
+        if (txtNombre.getText().isBlank()) {
+            mensaje(Alert.AlertType.WARNING, "El nombre de la categoría no puede estar vacío.");
+            return;
+        }
+
         categoriaSeleccionada.setNombre(txtNombre.getText().trim());
         categoriaSeleccionada.setActiva(chkActivo.isSelected());
 
-        if (categoriaDAO.actualizar(categoriaSeleccionada)) {
-            mensaje(Alert.AlertType.INFORMATION, "Categoría actualizada con éxito.");
-            cargarCategorias();
-            limpiar();
-        } else {
-            mensaje(Alert.AlertType.ERROR, "Error al actualizar la categoría.");
+        try {
+            if (categoriaDAO.actualizar(categoriaSeleccionada)) {
+                mensaje(Alert.AlertType.INFORMATION, "Categoría actualizada con éxito.");
+                cargarCategorias();
+                limpiar();
+            } else {
+                mensaje(Alert.AlertType.ERROR, "Error al actualizar la categoría.");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            mensaje(Alert.AlertType.ERROR, "Detalle del error: " + e.getMessage());
         }
     }
 
@@ -87,12 +104,25 @@ public class CategoriaController {
             return;
         }
 
-        if (categoriaDAO.eliminar(categoriaSeleccionada.getId())) {
-            mensaje(Alert.AlertType.INFORMATION, "Categoría eliminada con éxito.");
-            cargarCategorias();
-            limpiar();
-        } else {
-            mensaje(Alert.AlertType.ERROR, "No se pudo eliminar (puede estar asociada a productos).");
+        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+        confirm.setTitle("Confirmar eliminación");
+        confirm.setHeaderText(null);
+        confirm.setContentText("¿Está seguro de eliminar la categoría '" + categoriaSeleccionada.getNombre() + "'?");
+
+        Optional<ButtonType> result = confirm.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            try {
+                if (categoriaDAO.eliminar(categoriaSeleccionada.getId())) {
+                    mensaje(Alert.AlertType.INFORMATION, "Categoría eliminada con éxito.");
+                    cargarCategorias();
+                    limpiar();
+                } else {
+                    mensaje(Alert.AlertType.ERROR, "No se pudo eliminar.");
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                mensaje(Alert.AlertType.ERROR, "No se puede eliminar porque está asociada a un producto registrado.");
+            }
         }
     }
 
