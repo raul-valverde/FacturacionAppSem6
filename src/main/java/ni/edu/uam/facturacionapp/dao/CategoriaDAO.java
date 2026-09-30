@@ -11,7 +11,7 @@ public class CategoriaDAO {
 
     public List<Categoria> listar() {
         List<Categoria> lista = new ArrayList<>();
-        String sql = "SELECT id, nombre, activo FROM categoria ORDER BY id ASC";
+        String sql = "SELECT id, nombre, activa FROM categoria ORDER BY id ASC";
 
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql);
@@ -31,7 +31,7 @@ public class CategoriaDAO {
     }
 
     public boolean guardar(Categoria c) {
-        String sql = "INSERT INTO categoria (nombre, activo) VALUES (?, ?)";
+        String sql = "INSERT INTO categoria (nombre, activa) VALUES (?, ?)";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 

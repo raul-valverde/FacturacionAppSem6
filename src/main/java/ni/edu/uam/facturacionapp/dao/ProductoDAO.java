@@ -14,7 +14,7 @@ public class ProductoDAO {
     public boolean guardar(Producto producto) {
         String sql = """
             INSERT INTO producto (
-                codigo, nombre, categoria_id, precio_venta, existencia, ruta_imagen, activo
+                codigo, nombre, categoria_id, precio_venta, existencia, ruta_imagen, activa
             ) VALUES (?, ?, ?, ?, ?, ?, ?)
             """;
 
